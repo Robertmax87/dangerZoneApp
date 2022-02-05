@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_screen"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <android.widget.Button
+        android:id="@+id/Police"
+        android:layout_width="270dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="124dp"
+        android:layout_marginBottom="70dp"
+        android:background="@drawable/police_button"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="0"
+        android:text="@string/law_enforcement"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+
+        app:layout_constraintBottom_toTopOf="@+id/suspicious"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.widget.Button
+        android:id="@+id/suspicious"
+        android:layout_width="270dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="73dp"
+        android:layout_marginTop="269dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginBottom="357dp"
+        android:background="@drawable/unrequited_danger"
+        android:text="@string/SuspiciousActivity"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <android.widget.Button
+        android:id="@+id/editNetwork"
+        android:background="@drawable/add_network"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="146dp"
+        android:layout_marginBottom="163dp"
+        android:text="@string/change_or_edit_safety_network"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/suspicious" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

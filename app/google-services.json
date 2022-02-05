@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "381293354211",
+    "project_id": "dangerzone-ceea9",
+    "storage_bucket": "dangerzone-ceea9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381293354211:android:879be9d128af75b2e4b9d6",
+        "android_client_info": {
+          "package_name": "com.example.dangerzone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381293354211-1lkd0crh1jg2gt3aa1ft4qakq0t2ndpl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBA_xq4GIRN5r1pkX4ANnleCXNIGchKfjs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "381293354211-1lkd0crh1jg2gt3aa1ft4qakq0t2ndpl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
