@@ -6,7 +6,7 @@ import java.util.List;
 public class PhoneBook {
     HashMap<String,String> rolodex;
 
-    public PhoneBook( List<String> numbers, List<String> names){
+    public PhoneBook( List<String> names, List<String> numbers){
 
 
         for(int i = 0; i < numbers.size(); i++){

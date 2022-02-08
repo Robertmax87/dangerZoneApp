@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -28,39 +29,46 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.dangerzone.databinding.ActivityEmergencyViewBinding;
 
+import java.util.HashMap;
+
+import static com.example.dangerzone.Network.getSavedObjectFromPreference;
+
 
 public class EmergencyView extends AppCompatActivity {
 
+    private static final int PERMISSION_SEND_SMS = 123;
 
-    android.widget.Button Police, suspicious;
-    Button networkEditor;
+    android.widget.Button police, suspicious, networkEditor;
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityEmergencyViewBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_emergency_view);
 
         networkEditor = findViewById(R.id.editNetwork);
-        Police = findViewById(R.id.Police);
+        police = findViewById(R.id.Police);
         suspicious = findViewById(R.id.suspicious);
 
-        binding = ActivityEmergencyViewBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+       // binding = ActivityEmergencyViewBinding.inflate(getLayoutInflater());
+      //  setContentView(binding.getRoot());
 
         //setSupportActionBar(binding.toolbar);
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_emergency_view);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        Police.setOnClickListener(new View.OnClickListener() {
+        requestSmsPermission();
+
+       police.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //send our current location with a message that we are being pulled over by the police through smsManager
 
+                PhoneBook pb = getSavedObjectFromPreference(getApplicationContext(), "mPreference", "mObjectKey");
 
                 LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 if (ActivityCompat.checkSelfPermission(EmergencyView.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(EmergencyView.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -78,14 +86,18 @@ public class EmergencyView extends AppCompatActivity {
                 double latitude = location.getLatitude();
 
                 //get phone numbers from fireBase and shoot off texts to them
-                //Address currentLocation = null;
-                //String uri = "You are receiving this message because you are in my safety network. I , " + PhoneBook.getName() + "have been pulled over by the police at this location: "+ "http://maps.google.com/maps?saddr=" + latitude +","+ longitude;
+                Address currentLocation = null;
+                String uri = "You are receiving this message because you are in my safety network. I , " + "have been pulled over by the police at this location: "+ "http://maps.google.com/maps?saddr=" + latitude +","+ longitude;
 
                 SmsManager smsManager = SmsManager.getDefault();
-                StringBuffer smsBody = new StringBuffer();
-                //smsBody.append(Uri.parse(uri));
 
-                //smsManager.sendTextMessage(phonenumber, null, smsBody.toString(), null, null);
+                assert pb != null;
+                HashMap<String, String> contacts = pb.getRolodex();
+                for(String name : contacts.keySet()){
+                    String phonenumber = contacts.get(name);
+                    smsManager.sendTextMessage(phonenumber, null, uri, null, null);
+                }
+
 
 
                 //opens video camera
@@ -96,8 +108,7 @@ public class EmergencyView extends AppCompatActivity {
             }
         });
 
-
-        suspicious.setOnClickListener(new View.OnClickListener() {
+         suspicious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //send our current location with a message that we may be in danger through smsManager
@@ -112,19 +123,25 @@ public class EmergencyView extends AppCompatActivity {
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
+                PhoneBook pb = getSavedObjectFromPreference(getApplicationContext(), "mPreference", "mObjectKey");
                 Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 double longitude = location.getLongitude();
                 double latitude = location.getLatitude();
                 //Address currentLocation = null;
-                //  String uri = "You are receiving this message because you are in my safety network. I , " + PhoneBook.getName() + "may be in danger at or near this location: "+ "http://maps.google.com/maps?saddr=" + latitude +","+ longitude;
+                String uri = "You are receiving this message because you are in my safety network. I , " +  "may be in danger at or near this location: "+ "http://maps.google.com/maps?saddr=" + latitude +","+ longitude;
 
                 SmsManager smsManager = SmsManager.getDefault();
-                StringBuffer smsBody = new StringBuffer();
+                assert pb != null;
+                HashMap<String, String> contacts = pb.getRolodex();
+                for(String name : contacts.keySet()){
+                    String phonenumber = contacts.get(name);
+                    smsManager.sendTextMessage(phonenumber, null, uri, null, null);
+                }
 
                 //get phone numbers from firebase and shoot off texts to them
                 // smsBody.append(Uri.parse(uri));
 
-                //for(String key : )
+
 
                 // smsManager.sendTextMessage(phonenumber, null, smsBody.toString(), null, null);
                 Context context = getApplicationContext();
@@ -136,7 +153,9 @@ public class EmergencyView extends AppCompatActivity {
 
             }
         });
+
         //update or add our network
+
         networkEditor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,22 +164,16 @@ public class EmergencyView extends AppCompatActivity {
                 finish();
             }
         });
+}
+    private void requestSmsPermission() {
+
+        // check permission is given
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            // request permission (see result in onRequestPermissionsResult() method)
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.SEND_SMS},
+                    PERMISSION_SEND_SMS);
+
+        }
     }
 }
-
-
-        /**binding.fab.setOnClickLidstener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-    }
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_emergency_view);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
-}**/

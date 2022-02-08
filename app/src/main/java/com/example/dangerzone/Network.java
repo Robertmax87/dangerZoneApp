@@ -21,7 +21,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.dangerzone.databinding.ActivityNetworkBinding;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
@@ -39,7 +38,7 @@ public class Network extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityNetworkBinding binding;
 
-    //private DatabaseReference mDatabase;
+
 
 
     @Override
@@ -50,6 +49,7 @@ public class Network extends AppCompatActivity {
 
 
         super.onCreate(savedInstanceState);
+
         name1 = findViewById(R.id.name1);
         name2 = findViewById(R.id.name2);
         name3 = findViewById(R.id.name3);
@@ -94,9 +94,9 @@ public class Network extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                saveObjectToSharedPreference(context, "mPreference", "mObjectKey", universal);
+                saveObjectToSharedPreference(getApplicationContext(), "mPreference", "mObjectKey", universal);
 
-                startActivity(new Intent(Network.this, MainActivity.class));
+                startActivity(new Intent(Network.this, EmergencyView.class));
             }
         });
     }
@@ -110,11 +110,11 @@ public class Network extends AppCompatActivity {
         sharedPreferencesEditor.apply();
     }
 
-    public static PhoneBook getSavedObjectFromPreference(Context context, String preferenceFileName, String preferenceKey, PhoneBook book) {
+    public static PhoneBook getSavedObjectFromPreference(Context context, String preferenceFileName, String preferenceKey) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceFileName, 0);
         if (sharedPreferences.contains(preferenceKey)) {
             final Gson gson = new Gson();
-            return gson.fromJson(sharedPreferences.getString(preferenceKey, ""), (Type) book);
+            return gson.fromJson(sharedPreferences.getString(preferenceKey, ""), PhoneBook.class);
         }
         return null;
     }
