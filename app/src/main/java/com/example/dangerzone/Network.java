@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -30,8 +31,9 @@ import java.util.List;
 public class Network extends AppCompatActivity {
 
     //private static Object PhoneBook;
+
     TextInputEditText name1, name2, name3, number1, number2, number3;
-    Button networkFile;
+    android.widget.Button networkFile;
     DatabaseReference myData;
     Context context;
 
@@ -45,10 +47,8 @@ public class Network extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         //myData = FirebaseDatabase.getInstance().getReference();
-
-
-
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_network);
 
         name1 = findViewById(R.id.name1);
         name2 = findViewById(R.id.name2);
@@ -57,46 +57,54 @@ public class Network extends AppCompatActivity {
         number2 = findViewById(R.id.number2);
         number3 = findViewById(R.id.number3);
         networkFile = findViewById(R.id.fileNetwork);
-        String name_1 = name1.getText().toString().trim();
-        String name_2 = name2.getText().toString().trim();
-        String name_3 = name3.getText().toString().trim();
-        String number_1 = number1.getText().toString().trim();
-        String number_2 = number2.getText().toString().trim();
-        String number_3 = number3.getText().toString().trim();
 
-        List<String> names = new ArrayList<>();
-        names.add(name_1);
-        names.add(name_2);
-        names.add(name_3);
 
-        List<String> numbers = new ArrayList<>();
-        numbers.add(number_1);
-        numbers.add(number_2);
-        numbers.add(number_3);
 
-        PhoneBook universal = new PhoneBook(names, numbers);
 
        // myData.child("PhoneBooks").child("userContacts").setValue(universal);
 
 
 
 
-        binding = ActivityNetworkBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+       // binding = ActivityNetworkBinding.inflate(getLayoutInflater());
+       // setContentView(binding.getRoot());
 
         //setSupportActionBar(binding.toolbar);
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_network);
+      /**  NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_network);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+       **/
         //send information to database and then send to the home page with the two buttons
         networkFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String name_1 = name1.getText().toString().trim();
+                String name_2 = name2.getText().toString().trim();
+                String name_3 = name3.getText().toString().trim();
+                String number_1 = number1.getText().toString().trim();
+                String number_2 = number2.getText().toString().trim();
+                String number_3 = number3.getText().toString().trim();
 
+                List<String> names = new ArrayList<>();
+                names.add(name_1);
+                names.add(name_2);
+                names.add(name_3);
+
+                List<String> numbers = new ArrayList<>();
+                numbers.add(number_1);
+                numbers.add(number_2);
+                numbers.add(number_3);
+
+                PhoneBook universal = new PhoneBook(names, numbers);
+
+                Toast.makeText(Network.this, "Toasted", Toast.LENGTH_SHORT).show();
                 saveObjectToSharedPreference(getApplicationContext(), "mPreference", "mObjectKey", universal);
+                finish();
 
-                startActivity(new Intent(Network.this, EmergencyView.class));
+//                startActivity(new Intent(Network.this, EmergencyView.class));
+
+
             }
         });
     }
