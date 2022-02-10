@@ -14,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.telephony.SmsManager;
 import android.view.View;
@@ -29,6 +30,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.dangerzone.databinding.ActivityEmergencyViewBinding;
 
+import java.io.File;
 import java.util.HashMap;
 
 import static com.example.dangerzone.Network.getSavedObjectFromPreference;
@@ -54,87 +56,89 @@ public class EmergencyView extends AppCompatActivity {
         police = findViewById(R.id.Police);
         suspicious = findViewById(R.id.suspicious);
 
-       // binding = ActivityEmergencyViewBinding.inflate(getLayoutInflater());
-      //  setContentView(binding.getRoot());
+        // binding = ActivityEmergencyViewBinding.inflate(getLayoutInflater());
+        //  setContentView(binding.getRoot());
 
         //setSupportActionBar(binding.toolbar);
 
 
         requestSmsPermission();
+        requestLocationPermission();
 
-       police.setOnClickListener(new View.OnClickListener() {
+
+        police.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //send our current location with a message that we are being pulled over by the police through smsManager
 
                 PhoneBook pb = getSavedObjectFromPreference(getApplicationContext(), "mPreference", "mObjectKey");
-
+                System.out.println(45);
                 LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                if (ActivityCompat.checkSelfPermission(EmergencyView.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(EmergencyView.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
+
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestLocationPermission();
                 }
                 Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 double longitude = location.getLongitude();
                 double latitude = location.getLatitude();
 
+
                 //get phone numbers from fireBase and shoot off texts to them
                 Address currentLocation = null;
-                String uri = "You are receiving this message because you are in my safety network. I , " + "have been pulled over by the police at this location: "+ "http://maps.google.com/maps?saddr=" + latitude +","+ longitude;
+                String uri = "You are receiving this message because you are in my safety network. I , " + "have been pulled over by the police at this location: " + "http://maps.google.com/maps?saddr=" + latitude + "," + longitude;
 
                 SmsManager smsManager = SmsManager.getDefault();
 
-                assert pb != null;
-                HashMap<String, String> contacts = pb.getRolodex();
-                for(String name : contacts.keySet()){
-                    String phonenumber = contacts.get(name);
-                    smsManager.sendTextMessage(phonenumber, null, uri, null, null);
-                }
+               assert pb != null;
+               HashMap<String, String> contacts = pb.getRolodex();
+               for(String name : contacts.keySet()){
+               String phonenumber = contacts.get(name);
+               System.out.println(phonenumber);
+                   smsManager.sendTextMessage(phonenumber, null, uri, null, null);
+              }
 
-
+                System.out.println(45);
 
                 //opens video camera
                 Intent openCamera = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                startActivityForResult(openCamera, 1000);
+                openCamera.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 30);
+                startActivityForResult(openCamera, 2);
 
 
             }
         });
 
-         suspicious.setOnClickListener(new View.OnClickListener() {
+        suspicious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //send our current location with a message that we may be in danger through smsManager
+
                 LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                if (ActivityCompat.checkSelfPermission(EmergencyView.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(EmergencyView.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
+
+                System.out.println("Starting retrieval");
                 PhoneBook pb = getSavedObjectFromPreference(getApplicationContext(), "mPreference", "mObjectKey");
+                System.out.println("Retrieval complete");
+
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestLocationPermission();
+
+                }
                 Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 double longitude = location.getLongitude();
-                double latitude = location.getLatitude();
-                //Address currentLocation = null;
+               double latitude = location.getLatitude();
+                Address currentLocation = null;
                 String uri = "You are receiving this message because you are in my safety network. I , " +  "may be in danger at or near this location: "+ "http://maps.google.com/maps?saddr=" + latitude +","+ longitude;
 
                 SmsManager smsManager = SmsManager.getDefault();
+
                 assert pb != null;
+                //System.out.println("size: " + pb.rolodex.size());
                 HashMap<String, String> contacts = pb.getRolodex();
                 for(String name : contacts.keySet()){
+                    System.out.println(name);
                     String phonenumber = contacts.get(name);
+                    System.out.println("Phone No: "+phonenumber);
                     smsManager.sendTextMessage(phonenumber, null, uri, null, null);
                 }
 
@@ -143,7 +147,7 @@ public class EmergencyView extends AppCompatActivity {
 
 
 
-                // smsManager.sendTextMessage(phonenumber, null, smsBody.toString(), null, null);
+
                 Context context = getApplicationContext();
                 CharSequence text = "If you haven't used the app before or want to change your safety network, hit the button on the bottom of the page";
                 int duration = Toast.LENGTH_SHORT;
@@ -161,7 +165,7 @@ public class EmergencyView extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(EmergencyView.this, Network.class);
                 startActivity(intent);
-                finish();
+               finish();
             }
         });
 }
@@ -175,5 +179,34 @@ public class EmergencyView extends AppCompatActivity {
                     PERMISSION_SEND_SMS);
 
         }
+    }
+
+    private void requestLocationPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // request permission (see result in onRequestPermissionsResult() method)
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.SEND_SMS},
+                    PERMISSION_SEND_SMS);
+
+        }
+
+    }
+    private void requestVideoPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            // request permission (see result in onRequestPermissionsResult() method)
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.SEND_SMS},
+                    PERMISSION_SEND_SMS);
+
+        }
+
+    }
+    private File getTempFile(Context context) {
+        final File path = new File(Environment.getExternalStorageDirectory(),
+                context.getPackageName());
+        if (!path.exists()) {
+            path.mkdir();
+        }
+        return new File(path, "myImage.png");
     }
 }
