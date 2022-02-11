@@ -36,6 +36,26 @@ import java.util.HashMap;
 import static com.example.dangerzone.Network.getSavedObjectFromPreference;
 
 
+class TextSender extends Thread {
+
+    private String msg;
+    private String phoneNum;
+
+    public TextSender(String phoneNum, String msg)
+    {
+        this.msg = msg;
+        this.phoneNum = phoneNum;
+    }
+
+    public void run()
+    {
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(phoneNum, null, msg, null, null);
+    }
+
+}
+
+
 public class EmergencyView extends AppCompatActivity {
 
     private static final int PERMISSION_SEND_SMS = 123;
@@ -64,50 +84,71 @@ public class EmergencyView extends AppCompatActivity {
 
         requestSmsPermission();
         requestLocationPermission();
-
+        requestVideoPermission();
 
         police.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //send our current location with a message that we may be in danger through smsManager
 
-                //send our current location with a message that we are being pulled over by the police through smsManager
-
-                PhoneBook pb = getSavedObjectFromPreference(getApplicationContext(), "mPreference", "mObjectKey");
-                System.out.println(45);
                 LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+                System.out.println("Starting retrieval");
+                PhoneBook pb = getSavedObjectFromPreference(getApplicationContext(), "mPreference", "mObjectKey");
+                System.out.println("Retrieval complete");
 
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     requestLocationPermission();
+
                 }
                 Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                double longitude = location.getLongitude();
-                double latitude = location.getLatitude();
 
+                if(true){//(location != null) {
+                    double longitude = location.getLongitude();
+                    double latitude = location.getLatitude();
+//                    Address currentLocation = null;
 
-                //get phone numbers from fireBase and shoot off texts to them
-                Address currentLocation = null;
-                String uri = "You are receiving this message because you are in my safety network. I , " + "have been pulled over by the police at this location: " + "http://maps.google.com/maps?saddr=" + latitude + "," + longitude;
+                    String uri = "You are receiving this message because you are in my safety network. I may be in danger at or near this location: " + "https://maps.google.com/maps?q=" + String.valueOf(latitude) + "," + String.valueOf(longitude);
+                    System.out.println(uri);
+                    System.out.println(latitude+","+longitude);
+                    assert pb != null;
+                    //System.out.println("size: " + pb.rolodex.size());
+                    HashMap<String, String> contacts = pb.getRolodex();
 
-                SmsManager smsManager = SmsManager.getDefault();
+                    if (contacts.isEmpty()) {
+                        Context context = getApplicationContext();
+                        CharSequence text = "If you haven't used the app before or want to change your safety network, hit the button on the bottom of the page";
+                        int duration = Toast.LENGTH_SHORT;
 
-               assert pb != null;
-               HashMap<String, String> contacts = pb.getRolodex();
-               for(String name : contacts.keySet()){
-               String phonenumber = contacts.get(name);
-               System.out.println(phonenumber);
-                   smsManager.sendTextMessage(phonenumber, null, uri, null, null);
-              }
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
 
-                System.out.println(45);
+                    for (String name : contacts.keySet()) {
+//                    String phonenumber = contacts.get(name);
+                    System.out.println("Name : "+name+" Phone No: "+contacts.get(name));
+//                    smsManager.sendTextMessage(phonenumber, null, uri, null, null);
+                        sendSMS(contacts.get(name), uri);
+                    }
+                }
+                else
+                {
+                    System.out.println("Unable to get location");
+                }
 
-                //opens video camera
+                //get phone numbers from firebase and shoot off texts to them
+                // smsBody.append(Uri.parse(uri));
+
                 Intent openCamera = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
                 openCamera.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 30);
                 startActivityForResult(openCamera, 2);
 
 
+
+
             }
         });
+
 
         suspicious.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,22 +165,33 @@ public class EmergencyView extends AppCompatActivity {
                     requestLocationPermission();
 
                 }
-                Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+              /**  Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 double longitude = location.getLongitude();
                double latitude = location.getLatitude();
                 Address currentLocation = null;
-                String uri = "You are receiving this message because you are in my safety network. I , " +  "may be in danger at or near this location: "+ "http://maps.google.com/maps?saddr=" + latitude +","+ longitude;
+               **/
+                String uri = "You are receiving this message because you are in my safety network. I , " +  "may be in danger at or near this location: "+ "http://maps.google.com/maps?saddr=";
 
-                SmsManager smsManager = SmsManager.getDefault();
+//                SmsManager smsManager = SmsManager.getDefault();
 
                 assert pb != null;
                 //System.out.println("size: " + pb.rolodex.size());
                 HashMap<String, String> contacts = pb.getRolodex();
+
+                if(contacts.isEmpty()){
+                    Context context = getApplicationContext();
+                    CharSequence text = "If you haven't used the app before or want to change your safety network, hit the button on the bottom of the page";
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+
                 for(String name : contacts.keySet()){
-                    System.out.println(name);
-                    String phonenumber = contacts.get(name);
-                    System.out.println("Phone No: "+phonenumber);
-                    smsManager.sendTextMessage(phonenumber, null, uri, null, null);
+//                    String phonenumber = contacts.get(name);
+//                    System.out.println("Name : "+name+" Phone No: "+phonenumber);
+//                    smsManager.sendTextMessage(phonenumber, null, uri, null, null);
+                    sendSMS(contacts.get(name), uri);
                 }
 
                 //get phone numbers from firebase and shoot off texts to them
@@ -148,12 +200,7 @@ public class EmergencyView extends AppCompatActivity {
 
 
 
-                Context context = getApplicationContext();
-                CharSequence text = "If you haven't used the app before or want to change your safety network, hit the button on the bottom of the page";
-                int duration = Toast.LENGTH_SHORT;
 
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
 
             }
         });
@@ -169,6 +216,13 @@ public class EmergencyView extends AppCompatActivity {
             }
         });
 }
+
+    private void sendSMS(String phoneNum, String msg)
+    {
+        TextSender ts = new TextSender(phoneNum, msg);
+        ts.start();
+    }
+
     private void requestSmsPermission() {
 
         // check permission is given
@@ -191,6 +245,8 @@ public class EmergencyView extends AppCompatActivity {
         }
 
     }
+
+
     private void requestVideoPermission(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             // request permission (see result in onRequestPermissionsResult() method)
