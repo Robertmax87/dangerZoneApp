@@ -108,7 +108,9 @@ public class EmergencyView extends AppCompatActivity {
                     double latitude = location.getLatitude();
 //                    Address currentLocation = null;
 
-                    String uri = "You are receiving this message because you are in my safety network. I may be in danger at or near this location: " + "https://maps.google.com/maps?q=" + String.valueOf(latitude) + "," + String.valueOf(longitude);
+                    String uri = "I have been stopped by the Police. You are receiving this message because you are in my safety network http://maps.google.com/maps?q=loc:" + String.format("%f,%f",latitude , longitude);
+
+
                     System.out.println(uri);
                     System.out.println(latitude+","+longitude);
                     assert pb != null;
@@ -117,7 +119,7 @@ public class EmergencyView extends AppCompatActivity {
 
                     if (contacts.isEmpty()) {
                         Context context = getApplicationContext();
-                        CharSequence text = "If you haven't used the app before or want to change your safety network, hit the button on the bottom of the page";
+                        CharSequence text = "Before using make DangerZone has the location, If you haven't used the app before or want to change your safety network, hit the button on the bottom of the page";
                         int duration = Toast.LENGTH_SHORT;
 
                         Toast toast = Toast.makeText(context, text, duration);
@@ -125,10 +127,8 @@ public class EmergencyView extends AppCompatActivity {
                     }
 
                     for (String name : contacts.keySet()) {
-//                    String phonenumber = contacts.get(name);
-                    System.out.println("Name : "+name+" Phone No: "+contacts.get(name));
-//                    smsManager.sendTextMessage(phonenumber, null, uri, null, null);
                         sendSMS(contacts.get(name), uri);
+                        System.out.println(contacts.get(name));
                     }
                 }
                 else
@@ -165,12 +165,12 @@ public class EmergencyView extends AppCompatActivity {
                     requestLocationPermission();
 
                 }
-              /**  Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+               Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 double longitude = location.getLongitude();
                double latitude = location.getLatitude();
                 Address currentLocation = null;
-               **/
-                String uri = "You are receiving this message because you are in my safety network. I , " +  "may be in danger at or near this location: "+ "http://maps.google.com/maps?saddr=";
+
+                String uri = "This is a distress message. I may be in danger at this location: http://maps.google.com/maps?q=loc:" + String.format("%f,%f", latitude ,longitude);
 
 //                SmsManager smsManager = SmsManager.getDefault();
 
@@ -188,9 +188,7 @@ public class EmergencyView extends AppCompatActivity {
                 }
 
                 for(String name : contacts.keySet()){
-//                    String phonenumber = contacts.get(name);
-//                    System.out.println("Name : "+name+" Phone No: "+phonenumber);
-//                    smsManager.sendTextMessage(phonenumber, null, uri, null, null);
+//
                     sendSMS(contacts.get(name), uri);
                 }
 
