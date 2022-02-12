@@ -168,11 +168,11 @@ public class EmergencyView extends AppCompatActivity {
                Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 double longitude = location.getLongitude();
                double latitude = location.getLatitude();
-                Address currentLocation = null;
+
 
                 String uri = "This is a distress message. I may be in danger at this location: http://maps.google.com/maps?q=loc:" + String.format("%f,%f", latitude ,longitude);
 
-//                SmsManager smsManager = SmsManager.getDefault();
+
 
                 assert pb != null;
                 //System.out.println("size: " + pb.rolodex.size());

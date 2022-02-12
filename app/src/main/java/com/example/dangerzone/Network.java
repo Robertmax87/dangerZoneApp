@@ -98,7 +98,7 @@ public class Network extends AppCompatActivity {
 
                 PhoneBook universal = new PhoneBook(names, numbers);
 
-                Toast.makeText(Network.this, "Toasted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Network.this, "Network added", Toast.LENGTH_SHORT).show();
                 saveObjectToSharedPreference(getApplicationContext(), "mPreference", "mObjectKey", universal);
                 finish();
 
