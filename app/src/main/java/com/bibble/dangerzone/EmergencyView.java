@@ -1,4 +1,4 @@
-package com.superBoss.dangerzone;
+package com.bibble.dangerzone;
 
 import android.Manifest;
 import android.content.Context;
@@ -20,12 +20,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.ui.AppBarConfiguration;
 
-import com.superBoss.dangerzone.databinding.ActivityEmergencyViewBinding;
+import com.bibble.dangerzone.databinding.ActivityEmergencyViewBinding;
 
 import java.io.File;
 import java.util.HashMap;
 
-import static com.superBoss.dangerzone.Network.getSavedObjectFromPreference;
+import static com.bibble.dangerzone.Network.getSavedObjectFromPreference;
 
 
 class TextSender extends Thread {
@@ -94,8 +94,16 @@ public class EmergencyView extends AppCompatActivity {
 
                 }
                 Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if(location == null){
+                    Context context = getApplicationContext();
+                    CharSequence text = "On initial download gps may need time to get coordinates, try again. Or if your location permission is off, turn it on.";
+                    int duration = Toast.LENGTH_SHORT;
 
-                if(true){//(location != null) {
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+
+                if(location != null){//(location != null) {
                     double longitude = location.getLongitude();
                     double latitude = location.getLatitude();
 //                    Address currentLocation = null;
@@ -104,7 +112,7 @@ public class EmergencyView extends AppCompatActivity {
 
 
                     System.out.println(uri);
-                    System.out.println(latitude+","+longitude);
+                    System.out.println(latitude+","+ longitude);
                     assert pb != null;
                     //System.out.println("size: " + pb.rolodex.size());
                     HashMap<String, String> contacts = pb.getRolodex();

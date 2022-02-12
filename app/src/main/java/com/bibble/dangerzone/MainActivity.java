@@ -1,4 +1,4 @@
-package com.superBoss.dangerzone;
+package com.bibble.dangerzone;
 
 import android.os.Bundle;
 
@@ -13,7 +13,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.superBoss.dangerzone.databinding.ActivityMainBinding;
+import com.bibble.dangerzone.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;

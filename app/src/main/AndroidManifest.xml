@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.superBoss.dangerzone">
+    package="com.bibble.dangerzone">
 
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -22,14 +22,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DangerZone">
         <activity
-            android:name="com.superBoss.dangerzone.Network"
+            android:name="com.bibble.dangerzone.Network"
             android:label="@string/title_activity_network"
             android:theme="@style/Theme.DangerZone.NoActionBar" />
-        <activity
-            android:name="com.superBoss.dangerzone.Signup"
-            android:label="@string/title_activity_signup"
-            android:theme="@style/Theme.DangerZone.NoActionBar" />
-        <activity android:name="com.superBoss.dangerzone.EmergencyView"
+        <activity android:name="com.bibble.dangerzone.EmergencyView"
             android:label="@string/title_activity_emergency_view"
             android:theme="@style/Theme.DangerZone.NoActionBar">
             <intent-filter>
@@ -38,7 +34,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.superBoss.dangerzone.MainActivity"
+            android:name="com.bibble.dangerzone.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.DangerZone.NoActionBar">
 

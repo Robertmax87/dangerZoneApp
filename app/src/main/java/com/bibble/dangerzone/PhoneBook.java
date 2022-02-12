@@ -1,4 +1,4 @@
-package com.superBoss.dangerzone;
+package com.bibble.dangerzone;
 
 import java.util.HashMap;
 import java.util.List;

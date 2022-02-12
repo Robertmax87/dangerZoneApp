@@ -1,4 +1,4 @@
-package com.superBoss.dangerzone;
+package com.bibble.dangerzone;
 
 import android.location.Location;
 import android.location.LocationListener;

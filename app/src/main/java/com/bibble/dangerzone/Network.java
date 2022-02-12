@@ -1,4 +1,4 @@
-package com.superBoss.dangerzone;
+package com.bibble.dangerzone;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,9 +11,9 @@ import android.widget.Toast;
 
 import androidx.navigation.ui.AppBarConfiguration;
 
-import com.superBoss.dangerzone.databinding.ActivityNetworkBinding;
+import com.bibble.dangerzone.databinding.ActivityNetworkBinding;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.database.DatabaseReference;
+//import com.google.firebase.database.DatabaseReference;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -25,11 +25,11 @@ public class Network extends AppCompatActivity {
 
     TextInputEditText name1, name2, name3, number1, number2, number3;
     android.widget.Button networkFile;
-    DatabaseReference myData;
+   // DatabaseReference myData;
     Context context;
 
     private AppBarConfiguration appBarConfiguration;
-    private ActivityNetworkBinding binding;
+  //  private ActivityNetworkBinding binding;
 
 
 
