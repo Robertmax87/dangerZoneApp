@@ -1,16 +1,12 @@
-package com.example.dangerzone;
+package com.superBoss.dangerzone;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,22 +14,18 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.telephony.SmsManager;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
-import com.example.dangerzone.databinding.ActivityEmergencyViewBinding;
+import com.superBoss.dangerzone.databinding.ActivityEmergencyViewBinding;
 
 import java.io.File;
 import java.util.HashMap;
 
-import static com.example.dangerzone.Network.getSavedObjectFromPreference;
+import static com.superBoss.dangerzone.Network.getSavedObjectFromPreference;
 
 
 class TextSender extends Thread {

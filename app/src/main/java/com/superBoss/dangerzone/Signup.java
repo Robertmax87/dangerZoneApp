@@ -1,11 +1,8 @@
-package com.example.dangerzone;
+package com.superBoss.dangerzone;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.TextUtils;
@@ -13,12 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.navigation.ui.AppBarConfiguration;
 
 
-import com.example.dangerzone.databinding.ActivitySignupBinding;
+import com.superBoss.dangerzone.databinding.ActivitySignupBinding;
 import com.google.android.material.textfield.TextInputEditText;
 
 

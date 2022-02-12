@@ -1,4 +1,4 @@
-package com.example.dangerzone;
+package com.superBoss.dangerzone;
 
 import org.junit.Test;
 
