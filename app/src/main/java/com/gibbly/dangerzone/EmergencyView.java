@@ -1,4 +1,4 @@
-package com.bibble.dangerzone;
+package com.gibbly.dangerzone;
 
 import android.Manifest;
 import android.content.Context;
@@ -20,12 +20,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.ui.AppBarConfiguration;
 
-import com.bibble.dangerzone.databinding.ActivityEmergencyViewBinding;
+import com.gibbly.dangerzone.databinding.ActivityEmergencyViewBinding;
 
 import java.io.File;
 import java.util.HashMap;
 
-import static com.bibble.dangerzone.Network.getSavedObjectFromPreference;
+import static com.gibbly.dangerzone.Network.getSavedObjectFromPreference;
 
 
 class TextSender extends Thread {

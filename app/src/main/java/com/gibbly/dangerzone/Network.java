@@ -1,4 +1,4 @@
-package com.bibble.dangerzone;
+package com.gibbly.dangerzone;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import androidx.navigation.ui.AppBarConfiguration;
 
-import com.bibble.dangerzone.databinding.ActivityNetworkBinding;
+import com.gibbly.dangerzone.databinding.ActivityNetworkBinding;
 import com.google.android.material.textfield.TextInputEditText;
 //import com.google.firebase.database.DatabaseReference;
 import com.google.gson.Gson;

@@ -1,4 +1,4 @@
-package com.bibble.dangerzone;
+package com.gibbly.dangerzone;
 
 import java.util.HashMap;
 import java.util.List;

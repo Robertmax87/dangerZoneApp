@@ -1,4 +1,4 @@
-package com.bibble.dangerzone;
+package com.gibbly.dangerzone;
 
 import android.content.Context;
 
