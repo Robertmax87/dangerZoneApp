@@ -166,30 +166,36 @@ public class EmergencyView extends AppCompatActivity {
 
                 }
                Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                double longitude = location.getLongitude();
-               double latitude = location.getLatitude();
+
+                if(location != null) {
+                    double longitude = location.getLongitude();
+                    double latitude = location.getLatitude();
 
 
-                String uri = "This is a distress message. I may be in danger at this location: http://maps.google.com/maps?q=loc:" + String.format("%f,%f", latitude ,longitude);
+                    String uri = "This is a distress message. I may be in danger at this location: http://maps.google.com/maps?q=loc:" + String.format("%f,%f", latitude, longitude);
 
 
+                    assert pb != null;
+                    //System.out.println("size: " + pb.rolodex.size());
+                    HashMap<String, String> contacts = pb.getRolodex();
 
-                assert pb != null;
-                //System.out.println("size: " + pb.rolodex.size());
-                HashMap<String, String> contacts = pb.getRolodex();
+                    if (contacts.isEmpty()) {
+                        Context context = getApplicationContext();
+                        CharSequence text = "If you haven't used the app before or want to change your safety network, hit the button on the bottom of the page";
+                        int duration = Toast.LENGTH_SHORT;
 
-                if(contacts.isEmpty()){
-                    Context context = getApplicationContext();
-                    CharSequence text = "If you haven't used the app before or want to change your safety network, hit the button on the bottom of the page";
-                    int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                    }
 
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                }
-
-                for(String name : contacts.keySet()){
+                    for (String name : contacts.keySet()) {
 //
-                    sendSMS(contacts.get(name), uri);
+                        sendSMS(contacts.get(name), uri);
+                    }
+                }
+                else {
+
+                    System.out.println("Unable to get location");
                 }
 
                 //get phone numbers from firebase and shoot off texts to them
